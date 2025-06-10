@@ -1,12 +1,9 @@
 package finalmission;
 
+import static finalmission.TestFixture.login;
 import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,21 +31,5 @@ public class LoginTest {
             .then()
             .statusCode(200)
             .body("email", is("123"));
-    }
-
-    private String login() {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", "123");
-        params.put("password", "123");
-
-        Response response = RestAssured.given()
-            .contentType(ContentType.JSON)
-            .body(params)
-            .when().post("/login")
-            .then()
-            .statusCode(200)
-            .extract().response();
-
-        return response.cookie("token");
     }
 }

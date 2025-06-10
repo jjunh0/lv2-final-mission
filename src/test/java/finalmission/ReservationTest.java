@@ -3,6 +3,10 @@ package finalmission;
 import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +24,49 @@ public class ReservationTest {
             .then()
             .statusCode(200)
             .body("size()", is(9));
+    }
+
+    @Test
+    @DisplayName("예약이 가능하다")
+    void createReservation() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("meetingRoomId", 1L);
+        params.put("timeId", 1L);
+        params.put("date", LocalDate.of(2025, 06, 10));
+
+        RestAssured.given()
+            .cookies("token", TestFixture.login())
+            .contentType(ContentType.JSON)
+            .body(params)
+            .when().post("/reservations")
+            .then().log().all()
+            .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("이미 예약이 존재한다면 예약할 수 없다")
+    void cantCreateReservationIfDuplicated() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("meetingRoomId", 1L);
+        params.put("timeId", 1L);
+        params.put("date", LocalDate.of(2025, 06, 10));
+
+        RestAssured.given()
+            .cookies("token", TestFixture.login())
+            .contentType(ContentType.JSON)
+            .body(params)
+            .when().post("/reservations")
+            .then().log().all()
+            .statusCode(200);
+
+        RestAssured.given()
+            .cookies("token", TestFixture.login())
+            .contentType(ContentType.JSON)
+            .body(params)
+            .when().post("/reservations")
+            .then().log().all()
+            .statusCode(500);
+        //TODO: 에러 핸들러 작성 후 500으로 수정
     }
 
 }

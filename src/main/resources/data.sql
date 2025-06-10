@@ -9,3 +9,7 @@ INSERT INTO reservation_time(start_at) values ('14:00');
 INSERT INTO reservation_time(start_at) values ('15:00');
 INSERT INTO reservation_time(start_at) values ('16:00');
 INSERT INTO reservation_time(start_at) values ('17:00');
+
+INSERT INTO meeting_room(name) values ('어드레스룸');
+INSERT INTO meeting_room(name) values ('코치룸');
+INSERT INTO meeting_room(name) values ('나이스샷')
