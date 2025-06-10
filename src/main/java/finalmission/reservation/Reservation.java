@@ -31,6 +31,23 @@ public class Reservation {
 
     private LocalDate date;
 
+    public Reservation() {
+    }
+
+    public Reservation(Long id, Member member, MeetingRoom meetingRoom, ReservationTime time,
+        LocalDate date) {
+        this.id = id;
+        this.member = member;
+        this.meetingRoom = meetingRoom;
+        this.time = time;
+        this.date = date;
+    }
+
+    public Reservation(Member member, MeetingRoom meetingRoom, ReservationTime time,
+        LocalDate date) {
+        this(null, member, meetingRoom, time, date);
+    }
+
     public boolean isReservationTime(ReservationTime time) {
         return this.time == time;
     }
