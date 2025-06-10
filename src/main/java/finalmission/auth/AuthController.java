@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtExtractor jwtExtractor;
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginRequest request, HttpServletResponse response) {
@@ -30,7 +31,7 @@ public class AuthController {
 
     @GetMapping("/login/check")
     public ResponseEntity<LoginMember> check(HttpServletRequest request) {
-        String token = JwtExtractor.getTokenFromCookies(request.getCookies());
+        String token = jwtExtractor.getTokenFromCookies(request.getCookies());
         LoginMember loginMember = authService.getMemberByToken(token);
         return ResponseEntity.ok().body(loginMember);
     }
