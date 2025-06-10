@@ -22,4 +22,20 @@ public class TestFixture {
 
         return response.cookie("token");
     }
+
+    public static String login2() {
+        Map<String, String> params = new HashMap<>();
+        params.put("email", "234");
+        params.put("password", "123");
+
+        Response response = RestAssured.given()
+            .contentType(ContentType.JSON)
+            .body(params)
+            .when().post("/login")
+            .then()
+            .statusCode(200)
+            .extract().response();
+
+        return response.cookie("token");
+    }
 }

@@ -52,12 +52,6 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    private void validateHasReservation(Long meetingRoomId, LocalDate date, Long timeId) {
-        if(reservationRepository.existsByMeetingRoomIdAndDateAndTimeId(meetingRoomId, date, timeId)) {
-            throw new IllegalArgumentException("해당 시간에 예약이 존재합니다");
-        }
-    }
-
     public List<ReservationResponse> getByMember(Member member) {
         return reservationRepository.findAllByMemberId(member.getId())
             .stream().map(reservation -> new ReservationResponse(
@@ -66,5 +60,26 @@ public class ReservationService {
                 reservation.getTime().getStartAt(),
                 reservation.getDate()
             )).toList();
+    }
+
+    public void delete(Member member, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+            .orElseThrow(() -> new IllegalArgumentException("해당하는 예약이 없습니다."));
+
+        validateIsMy(reservation, member);
+
+        reservationRepository.delete(reservation);
+    }
+
+    private void validateHasReservation(Long meetingRoomId, LocalDate date, Long timeId) {
+        if(reservationRepository.existsByMeetingRoomIdAndDateAndTimeId(meetingRoomId, date, timeId)) {
+            throw new IllegalArgumentException("해당 시간에 예약이 존재합니다");
+        }
+    }
+
+    private void validateIsMy(Reservation reservation, Member member) {
+        if(!reservation.isBy(member)) {
+            throw new IllegalArgumentException("나의 예약만 삭제 가능합니다.");
+        }
     }
 }

@@ -23,4 +23,27 @@ public class MemberTest {
             .statusCode(200)
             .body("size()", is(3));
     }
+
+    @Test
+    @DisplayName("내 예약을 삭제할 수 있다")
+    void canDeleteMyReservation() {
+        RestAssured.given()
+            .cookies("token", TestFixture.login())
+            .when()
+            .delete("/member/reservations?id=1")
+            .then().log().all()
+            .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("내 예약이 아니라면 삭제할 수 없다")
+    void cantDeleteNotMyReservation() {
+        RestAssured.given()
+            .cookies("token", TestFixture.login2())
+            .when()
+            .delete("/member/reservations?id=1")
+            .then().log().all()
+            .statusCode(500);
+        //TODO: 예외 핸들러 작성 후 예외 코드 수정
+    }
 }
