@@ -32,7 +32,7 @@ public class ReservationTest {
         Map<String, Object> params = new HashMap<>();
         params.put("meetingRoomId", 1L);
         params.put("timeId", 1L);
-        params.put("date", LocalDate.of(2025, 06, 10));
+        params.put("date", LocalDate.of(2025, 06, 11));
 
         RestAssured.given()
             .cookies("token", TestFixture.login())
@@ -49,7 +49,7 @@ public class ReservationTest {
         Map<String, Object> params = new HashMap<>();
         params.put("meetingRoomId", 1L);
         params.put("timeId", 1L);
-        params.put("date", LocalDate.of(2025, 06, 10));
+        params.put("date", LocalDate.of(2025, 06, 11));
 
         RestAssured.given()
             .cookies("token", TestFixture.login())
