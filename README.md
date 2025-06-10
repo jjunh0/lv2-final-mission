@@ -7,11 +7,12 @@
 - 사용자는 회의실을 예약할 수 있습니다.
   - `POST /reservations` 
 - 모든 사용자는 예약 현황을 확인할 수 있습니다.
-  - `GET /space/{spaceId}/reservations?date={date}`
+  - `GET /reservations?meetingroom={meetingRoomId}&date={date}`
 - 사용자 본인은 자신이 한 예약의 상세 정보까지 확인할 수 있습니다.
-  - `GET /member/reservaitons/{reservationId}`
+  - `GET /member/reservaitons`
 - 사용자는 본인의 예약만 수정하고 삭제할 수 있습니다.
-  - `POST /member/reservations/{id}`
+  - `PATCH /member/reservations/{id}`
+  - `DELETE /member/reservations/{id}`
 - 회의실 예약에 성공 시, 사용자에게 이메일을 전송합니다.
 
 ### 사용자

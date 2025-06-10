@@ -57,4 +57,14 @@ public class ReservationService {
             throw new IllegalArgumentException("해당 시간에 예약이 존재합니다");
         }
     }
+
+    public List<ReservationResponse> getByMember(Member member) {
+        return reservationRepository.findAllByMemberId(member.getId())
+            .stream().map(reservation -> new ReservationResponse(
+                reservation.getId(),
+                reservation.getMeetingRoom().getName(),
+                reservation.getTime().getStartAt(),
+                reservation.getDate()
+            )).toList();
+    }
 }

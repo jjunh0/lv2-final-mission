@@ -51,4 +51,24 @@ public class Reservation {
     public boolean isReservationTime(ReservationTime time) {
         return this.time == time;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public MeetingRoom getMeetingRoom() {
+        return meetingRoom;
+    }
+
+    public ReservationTime getTime() {
+        return time;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
 }

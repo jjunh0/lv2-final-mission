@@ -12,4 +12,8 @@ INSERT INTO reservation_time(start_at) values ('17:00');
 
 INSERT INTO meeting_room(name) values ('어드레스룸');
 INSERT INTO meeting_room(name) values ('코치룸');
-INSERT INTO meeting_room(name) values ('나이스샷')
+INSERT INTO meeting_room(name) values ('나이스샷');
+
+INSERT INTO reservation(member_id, meeting_room_id, time_id, date) values (1, 1, 1, '2025-06-10');
+INSERT INTO reservation(member_id, meeting_room_id, time_id, date) values (1, 1, 2, '2025-06-10');
+INSERT INTO reservation(member_id, meeting_room_id, time_id, date) values (1, 1, 3, '2025-06-10');
