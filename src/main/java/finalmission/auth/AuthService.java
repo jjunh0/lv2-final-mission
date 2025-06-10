@@ -11,11 +11,16 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenService jwtTokenService;
 
     public String login(LoginRequest request) {
         Member member = memberRepository.findByEmailAndPassword(request.email(), request.password())
             .orElseThrow(NoSuchElementException::new);
-        return jwtTokenProvider.getToken(member);
+        return jwtTokenService.getToken(member);
+    }
+
+    public LoginMember getMemberByToken(String token) {
+        Member member = jwtTokenService.getMember(token);
+        return new LoginMember(member.getEmail());
     }
 }
