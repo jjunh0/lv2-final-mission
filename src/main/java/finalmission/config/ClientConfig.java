@@ -10,14 +10,14 @@ import org.springframework.web.client.RestClient;
 public class ClientConfig {
 
     @Bean
-    public RestClient holidayRestClient() {
+    public RestClient nameRestClient() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(Duration.ofSeconds(5));
         requestFactory.setReadTimeout(Duration.ofSeconds(30));
 
         return RestClient.builder()
             .requestFactory(requestFactory)
-            .baseUrl("https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo").build();
+            .baseUrl("https://randommer.io/api/Name?nameType=firstname&quantity=1").build();
     }
 }
 

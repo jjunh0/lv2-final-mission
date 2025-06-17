@@ -1,6 +1,5 @@
 package finalmission.reservation;
 
-import finalmission.client.HolidayService;
 import finalmission.meetingroom.MeetingRoom;
 import finalmission.meetingroom.MeetingRoomRepository;
 import finalmission.member.Member;
@@ -16,16 +15,15 @@ public class ReservationService {
     private final ReservationTimeRepository reservationTimeRepository;
     private final ReservationRepository reservationRepository;
     private final MeetingRoomRepository meetingRoomRepository;
-    private final HolidayService holidayService;
 
-    public List<MeetingRoomAvailableTimeResponse> getAvailableTimes(Long meetingRoomId,
+    public List<MeetingRoomTimeResponse> getAvailableTimes(Long meetingRoomId,
         LocalDate date) {
         List<ReservationTime> reservationTimes = reservationTimeRepository.findAll();
         List<Reservation> reservations = reservationRepository.findByMeetingRoomIdAndDate(
             meetingRoomId, date);
         return reservationTimes.stream()
             .map(reservationTime ->
-                new MeetingRoomAvailableTimeResponse(
+                new MeetingRoomTimeResponse(
                     reservationTime.getId(),
                     reservationTime.getStartAt(),
                     hasReservationInTime(reservationTime, reservations)
@@ -41,7 +39,6 @@ public class ReservationService {
 
     public void create(Member member, ReservationRequest request) {
         validateHasReservation(request.meetingRoomId(), request.date(), request.timeId());
-        validateIsHoliday(request);
         MeetingRoom meetingRoom = meetingRoomRepository.findById(request.meetingRoomId())
             .orElseThrow(() -> new IllegalArgumentException("해당하는 회의실이 없습니다."));
         ReservationTime reservationTime = reservationTimeRepository.findById(request.timeId())
@@ -74,20 +71,15 @@ public class ReservationService {
     }
 
     private void validateHasReservation(Long meetingRoomId, LocalDate date, Long timeId) {
-        if(reservationRepository.existsByMeetingRoomIdAndDateAndTimeId(meetingRoomId, date, timeId)) {
+        if (reservationRepository.existsByMeetingRoomIdAndDateAndTimeId(meetingRoomId, date,
+            timeId)) {
             throw new IllegalArgumentException("해당 시간에 예약이 존재합니다");
         }
     }
 
     private void validateIsMy(Reservation reservation, Member member) {
-        if(!reservation.isBy(member)) {
+        if (!reservation.isBy(member)) {
             throw new IllegalArgumentException("나의 예약만 삭제 가능합니다.");
         }
-    }
-
-    private void validateIsHoliday(ReservationRequest request) {
-//        if(holidayService.isHoliday(request.date())) {
-//            throw new IllegalArgumentException("공휴일엔 예약할 수 없습니다.");
-//        }
     }
 }

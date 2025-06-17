@@ -4,8 +4,6 @@ import finalmission.auth.AuthMember;
 import finalmission.auth.JwtExtractor;
 import finalmission.auth.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -13,11 +11,11 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import org.springframework.web.servlet.HandlerInterceptor;
 
 @RequiredArgsConstructor
 @Component
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
+
     private final JwtTokenService jwtTokenService;
     private final JwtExtractor jwtExtractor;
 

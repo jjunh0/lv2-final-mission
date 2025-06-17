@@ -13,6 +13,13 @@ public class MeetingRoom {
 
     private String name;
 
+    protected MeetingRoom() {
+    }
+
+    public MeetingRoom(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

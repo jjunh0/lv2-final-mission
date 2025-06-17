@@ -27,11 +27,11 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<MeetingRoomAvailableTimeResponse>> getAvailableTime(
+    public ResponseEntity<List<MeetingRoomTimeResponse>> getAvailableTime(
         @RequestParam("meetingroom") Long meetingRoomId,
         @RequestParam("date") LocalDate date
     ) {
-        List<MeetingRoomAvailableTimeResponse> responses = reservationService.getAvailableTimes(
+        List<MeetingRoomTimeResponse> responses = reservationService.getAvailableTimes(
             meetingRoomId, date);
         return ResponseEntity.ok().body(responses);
     }
