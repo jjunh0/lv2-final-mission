@@ -19,8 +19,10 @@ public class ReservationService {
     public List<MeetingRoomTimeResponse> getAvailableTimes(Long meetingRoomId,
         LocalDate date) {
         List<ReservationTime> reservationTimes = reservationTimeRepository.findAll();
-        List<Reservation> reservations = reservationRepository.findByMeetingRoomIdAndDate(
-            meetingRoomId, date);
+        MeetingRoom meetingRoom = meetingRoomRepository.findById(meetingRoomId)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회의실입니다."));
+        List<Reservation> reservations = reservationRepository.findByMeetingRoomAndDate(
+            meetingRoom, date);
         return reservationTimes.stream()
             .map(reservationTime ->
                 new MeetingRoomTimeResponse(
@@ -57,6 +59,7 @@ public class ReservationService {
                 reservation.getId(),
                 reservation.getMeetingRoom().getName(),
                 reservation.getTime().getStartAt(),
+                reservation.getTime().getStartAt().plusHours(1),
                 reservation.getDate()
             )).toList();
     }

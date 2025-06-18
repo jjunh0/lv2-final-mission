@@ -6,7 +6,8 @@ import java.time.LocalTime;
 public record ReservationResponse(
     Long reservationId,
     String meetingRoomName,
-    LocalTime time,
+    LocalTime startTime,
+    LocalTime endTime,
     LocalDate date
 ) {
 

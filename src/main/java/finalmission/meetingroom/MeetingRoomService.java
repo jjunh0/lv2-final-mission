@@ -1,6 +1,7 @@
 package finalmission.meetingroom;
 
 import finalmission.client.NameClient;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,13 @@ public class MeetingRoomService {
         String meetingRoomName = nameClient.getRandomName();
         MeetingRoom meetingRoom = new MeetingRoom(meetingRoomName);
         meetingRoomRepository.save(meetingRoom);
-        return new MeetingRoomResponse(meetingRoom.getName());
+        return new MeetingRoomResponse(meetingRoom.getId(), meetingRoom.getName());
+    }
+
+    public List<MeetingRoomResponse> findAll() {
+        return meetingRoomRepository.findAll()
+            .stream()
+            .map(meetingRoom -> new MeetingRoomResponse(meetingRoom.getId(), meetingRoom.getName()))
+            .toList();
     }
 }
