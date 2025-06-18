@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,5 +35,12 @@ public class ReservationController {
         List<MeetingRoomTimeResponse> responses = reservationService.getAvailableTimes(
             meetingRoomId, date);
         return ResponseEntity.ok().body(responses);
+    }
+
+    @DeleteMapping("/reservations")
+    public ResponseEntity<Void> delete(@AuthMember Member member,
+        @RequestParam("reservationId") Long reservationId) {
+        reservationService.delete(member, reservationId);
+        return ResponseEntity.ok().build();
     }
 }

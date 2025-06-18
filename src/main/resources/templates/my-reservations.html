@@ -193,24 +193,36 @@
         }
 
         function loadMyReservations() {
-            fetch('/member/reservations')
-                .then(response => {
-                    if (response.status === 401) {
-                        // 로그인이 필요한 경우
-                        showEmptyState('로그인이 필요합니다.', '로그인 후 예약 목록을 확인할 수 있습니다.');
-                        return;
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data) {
-                        displayReservations(data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showEmptyState('예약 목록을 불러오는데 실패했습니다.', '잠시 후 다시 시도해주세요.');
-                });
+            console.log('예약 목록 로드 시작');
+            fetch('/member/reservations', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include' // 쿠키 포함
+            })
+            .then(response => {
+                console.log('예약 목록 응답 상태:', response.status);
+                if (response.status === 401) {
+                    // 로그인이 필요한 경우
+                    showEmptyState('로그인이 필요합니다.', '로그인 후 예약 목록을 확인할 수 있습니다.');
+                    return;
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    console.log('받은 예약 데이터:', data);
+                    displayReservations(data);
+                }
+            })
+            .catch(error => {
+                console.error('예약 목록 로드 오류:', error);
+                showEmptyState('예약 목록을 불러오는데 실패했습니다.', '잠시 후 다시 시도해주세요.');
+            });
         }
 
         function displayReservations(reservations) {
@@ -232,6 +244,7 @@
         }
 
         function createReservationCard(reservation) {
+            console.log('예약 카드 생성:', reservation);
             const date = new Date(reservation.date);
             const formattedDate = date.toLocaleDateString('ko-KR', {
                 year: 'numeric',
@@ -251,7 +264,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <small class="text-muted">회의실</small>
-                                    <div class="fw-bold">${reservation.meetingRoomName}</div>
+                                    <div class="fw-bold">${reservation.meetingRoomName || '회의실'}</div>
                                 </div>
                                 <div class="col-6">
                                     <small class="text-muted">날짜</small>
@@ -278,7 +291,7 @@
                                 <i class="fas fa-clock me-1"></i>
                                 예약 시간: ${reservation.startTime} ~ ${reservation.endTime}
                             </small>
-                            <button class="btn btn-delete btn-sm" onclick="deleteReservation(${reservation.id})">
+                            <button class="btn btn-delete btn-sm" onclick="deleteReservation(${reservation.reservationId})" data-reservation-id="${reservation.reservationId}">
                                 <i class="fas fa-trash me-1"></i>삭제
                             </button>
                         </div>
@@ -305,28 +318,40 @@
         }
 
         function deleteReservation(reservationId) {
+            console.log('삭제할 예약 ID:', reservationId);
             currentReservationId = reservationId;
             const modal = new bootstrap.Modal(document.getElementById('deleteReservationModal'));
             modal.show();
         }
 
         function confirmDeleteReservation() {
-            if (!currentReservationId) return;
+            if (!currentReservationId) {
+                console.error('삭제할 예약 ID가 없습니다.');
+                return;
+            }
 
-            fetch(`/member/reservations?id=${currentReservationId}`, {
-                method: 'DELETE'
+            console.log('예약 삭제 요청:', currentReservationId);
+            
+            fetch(`/reservations?reservationId=${currentReservationId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include' // 쿠키 포함
             })
             .then(response => {
+                console.log('삭제 응답 상태:', response.status);
                 if (response.ok) {
                     alert('예약이 성공적으로 삭제되었습니다.');
                     loadMyReservations();
                     bootstrap.Modal.getInstance(document.getElementById('deleteReservationModal')).hide();
                 } else {
+                    console.error('삭제 실패:', response.status, response.statusText);
                     alert('예약 삭제에 실패했습니다.');
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('삭제 중 오류:', error);
                 alert('예약 삭제 중 오류가 발생했습니다.');
             });
         }
