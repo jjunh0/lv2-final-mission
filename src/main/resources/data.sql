@@ -1,5 +1,5 @@
-INSERT INTO member(email, password) values ('123', '123');
-INSERT INTO member(email, password) values ('234', '123');
+INSERT INTO member(email, password) values ('123@gmail.com', '123');
+INSERT INTO member(email, password) values ('234@gmail.com', '123');
 
 INSERT INTO reservation_time(start_at) values ('9:00');
 INSERT INTO reservation_time(start_at) values ('10:00');
