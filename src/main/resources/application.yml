@@ -1,23 +1,15 @@
 spring:
-    application:
-        name: lv2-final-mission
-    h2:
-        console:
-            enabled: true
-    datasource:
-        url: jdbc:h2:mem:DATABASE
-    jpa:
-        show-sql: true
-        hibernate:
-            ddl-auto: create-drop
-        properties:
-            hibernate:
-                format_sql: true
-        defer-datasource-initialization: true
+    profiles:
+        active: dev
 
-jwt:
-    key: /VCEkdrvbjkCLRp0G0LK12VsDYViO/kufd8UVphCq80MdiZzNlefqOcwqfpvW+jIRNBmhiNKbNUGXSwum0DSgUjkEl2To/350R/ffncBkVeO7tfNq/4rNXWGGHre9p8s14m0k2z/QS4=
-    expiration: 360000
+---
+spring:
+    config:
+        activate:
+            on-profile: dev
 
-name:
-    key:
+---
+spring:
+    config:
+        activate:
+            on-profile: prod
